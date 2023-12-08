@@ -1,5 +1,5 @@
 body {
-    background-color: red;
+    background-color: #242333;
     align-items: center;
     display: flex;
     justify-content: center;
@@ -7,12 +7,27 @@ body {
 }
 
 h1 {
-    color: gold;
+    color: #01B0D3;
 }
 h2 {
-    color: goldenrod;
+    color: #c1ff72;
 }
 
 .carte {
-    border: solid;
+    border: solid black;
+    width: 64px;
+    height: 100px;
+    margin-bottom: 20px;
+    color: white;
+}
+
+.Table {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.Score {
+    padding: auto;
+    color: white;
 }
