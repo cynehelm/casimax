@@ -33,6 +33,14 @@ function drawCardNumber() {
 */
 let playerScore = 0;
 let croupierScore = 0;
+const selectPlayerScore = document.getElementById("ScoreJoueur");
+const selectCroupierScore = document.getElementById("ScoreCroupier");
+const printPlayerScore = (num) => {
+    selectPlayerScore.innerText = "Player Score: " + num;
+}
+const printCroupierScore = (num) => {
+    selectCroupierScore.innerText = "Dealer Score: " + num;
+}
 
 /*
     CARTES DU CROUPIER
@@ -51,6 +59,7 @@ function croupierPiocheOne() {
     cardDeck.splice(num,1);
     croupierCardOne.innerHTML = objCard.name + objCard.family;
     croupierCardOne.setAttribute("class", "carte");
+    return croupierScore = croupierScore + objCard.weight;
 }
 //Crée carte 2 cachée du croupier
 function croupierPiocheTwo() {
@@ -65,6 +74,7 @@ function croupierRevealTwo() {
     }
     cardDeck.splice(num,1);
     croupierCardTwo.innerHTML = objCard.name + objCard.family;
+    return croupierScore = croupierScore + objCard.weight;
 }
 //Pioche la troisième carte si besoin
 function croupierPiocheThree() {
@@ -84,6 +94,7 @@ function croupierPiocheThree() {
     CARTES DU JOUEUR
 */
 const BoutonPioche = document.getElementById("BoutonPioche");
+const BoutonPasser = document.getElementById("BoutonPasser");
 const playerCardOne = document.getElementById("CarteJoueur-1");
 const playerCardTwo = document.getElementById("CarteJoueur-2");
 const playerCardThree = document.getElementById("CarteJoueur-3");
@@ -100,7 +111,7 @@ function playerInitialDrawOne () {
     cardDeck.splice(num,1);
     playerCardOne.innerHTML = objCard.name + objCard.family;
     playerCardOne.setAttribute("class", "carte");
-    return playerScore = objCard.weight;
+    return playerScore = playerScore + objCard.weight;
 }
 //Pioche carte 2 du joueur
 function playerInitialDrawTwo () {
@@ -112,6 +123,7 @@ function playerInitialDrawTwo () {
     cardDeck.splice(num,1);
     playerCardTwo.innerHTML = objCard.name + objCard.family;
     playerCardTwo.setAttribute("class", "carte");
+    return playerScore = playerScore + objCard.weight;
 }
 //Joueur choisis de tirer une troisième carte
 BoutonPioche.addEventListener("click", function() {
@@ -123,6 +135,15 @@ BoutonPioche.addEventListener("click", function() {
     cardDeck.splice(num,1);
     playerCardThree.innerHTML = objCard.name + objCard.family;
     playerCardThree.setAttribute("class", "carte");
+    playerScore = playerScore + objCard.weight;
+    croupierRevealTwo();
+    printPlayerScore(playerScore);
+    printCroupierScore(croupierScore);
+});
+//Joueur choisis de passer
+BoutonPasser.addEventListener("click", function() {
+    croupierRevealTwo();
+    printCroupierScore(croupierScore);
 });
 
 /*
@@ -138,6 +159,9 @@ croupierPiocheTwo();
 //Pioche les deux cartes initiales du joueur
 playerInitialDrawOne();
 playerInitialDrawTwo();
+//Original Scoreboard
+printPlayerScore(playerScore);
+printCroupierScore(croupierScore);
 
 //Debug purposes
 console.log(playerScore);
