@@ -1,5 +1,5 @@
 //Création du deck
-class ClassicCardSet {
+class BlackjackCardSet {
     constructor(weight, name, family) {
         this.weight = weight;
         this.name = name;
@@ -7,7 +7,7 @@ class ClassicCardSet {
     };
 };
 var cardDeck = [];
-const cardWeight = [1,2,3,4,5,6,7,8,9,10,11,12,13];
+const cardWeight = [1,2,3,4,5,6,7,8,9,10,10,10,10];
 const cardName = ["Ace","Deuces","Treyes","Four","Five","Six","Seven","Eight","Nine","Ten","Valet","Queen","King"];
 const cardFamily = [" of Hearts"," of Spades"," of Diamonds"," of Clubs"];
 //Génère les cartes et les mets dans l'array cardDeck
@@ -15,7 +15,7 @@ function generateCard() {
     let i = 0;
 
     while (i < 52) {
-        let card = new ClassicCardSet(cardWeight[i % cardWeight.length], cardName[i % cardName.length], cardFamily[i % cardFamily.length]);
+        let card = new BlackjackCardSet(cardWeight[i % cardWeight.length], cardName[i % cardName.length], cardFamily[i % cardFamily.length]);
         cardDeck.push(card);
         i++;
     };
@@ -29,75 +29,115 @@ function drawCardNumber() {
 };
 
 /*
-CARTES DU CROUPIER
+    SCORE BOARD
+*/
+let playerScore = 0;
+let croupierScore = 0;
+
+/*
+    CARTES DU CROUPIER
 */
 const croupierCardOne = document.getElementById("CarteCroupier-1");
 const croupierCardTwo = document.getElementById("CarteCroupier-2");
 const croupierCardThree = document.getElementById("CarteCroupier-3");
+//PREMIERE PIOCHE
+//Pioche carte 1 croupier
 function croupierPiocheOne() {
     let num = drawCardNumber();
     let objCard = cardDeck[num];
-    if (objCard === false) {
-        croupierPioche();
+    if (objCard === undefined) {
+        croupierPiocheOne();
     }
     cardDeck.splice(num,1);
     croupierCardOne.innerHTML = objCard.name + objCard.family;
+    croupierCardOne.setAttribute("class", "carte");
 }
+//Crée carte 2 cachée du croupier
 function croupierPiocheTwo() {
+    croupierCardTwo.setAttribute("class", "carte");
+}
+//Dévoile carte 2 du croupier
+function croupierRevealTwo() {
     let num = drawCardNumber();
     let objCard = cardDeck[num];
-    if (objCard === false) {
-        croupierPioche();
+    if (objCard === undefined) {
+        croupierPiocheTwo();
     }
     cardDeck.splice(num,1);
     croupierCardTwo.innerHTML = objCard.name + objCard.family;
 }
+//Pioche la troisième carte si besoin
 function croupierPiocheThree() {
     let num = drawCardNumber();
     let objCard = cardDeck[num];
-    if (objCard === false) {
-        croupierPioche();
+    if (objCard === undefined) {
+        croupierPiocheThree();
     }
     cardDeck.splice(num,1);
-    croupierCardOne.innerHTML = objCard.name + objCard.family;
+    croupierCardThree.innerHTML = objCard.name + objCard.family;
+    croupierCardThree.setAttribute("class", "carte");
 }
-//Tirage initiale du croupier
-croupierPiocheOne();
+
+//  TODO croupier reveal card
 
 /*
-CARTES DU JOUEUR
+    CARTES DU JOUEUR
 */
-const BoutonPiocheOne = document.getElementById("BoutonPioche-1");
-const BoutonPiocheTwo = document.getElementById("BoutonPioche-2");
-const BoutonPiocheThree = document.getElementById("BoutonPioche-3");
+const BoutonPioche = document.getElementById("BoutonPioche");
 const playerCardOne = document.getElementById("CarteJoueur-1");
 const playerCardTwo = document.getElementById("CarteJoueur-2");
 const playerCardThree = document.getElementById("CarteJoueur-3");
 //Syntaxe pour tirer un objet d'un array et imprimer un de ses attributs
-BoutonPiocheOne.addEventListener("click", function() {
+
+//PREMIERE PIOCHE
+//Pioche carte 1 du joueur
+function playerInitialDrawOne () {
     let num = drawCardNumber();
     let objCard = cardDeck[num];
-    if (objCard === false) {
-        alert("error");
+    if (objCard === undefined) {
+        playerInitialDrawOne();
     }
     cardDeck.splice(num,1);
     playerCardOne.innerHTML = objCard.name + objCard.family;
-});
-BoutonPiocheTwo.addEventListener("click", function() {
+    playerCardOne.setAttribute("class", "carte");
+    return playerScore = objCard.weight;
+}
+//Pioche carte 2 du joueur
+function playerInitialDrawTwo () {
     let num = drawCardNumber();
     let objCard = cardDeck[num];
-    if (objCard === false) {
-        alert("error");
+    if (objCard === undefined) {
+        playerInitialDrawTwo();
     }
     cardDeck.splice(num,1);
-    playerCardOne.innerHTML = objCard.name + objCard.family;
-});
-BoutonPiocheThree.addEventListener("click", function() {
+    playerCardTwo.innerHTML = objCard.name + objCard.family;
+    playerCardTwo.setAttribute("class", "carte");
+}
+//Joueur choisis de tirer une troisième carte
+BoutonPioche.addEventListener("click", function() {
     let num = drawCardNumber();
     let objCard = cardDeck[num];
-    if (objCard === false) {
-        alert("error");
+    if (objCard === undefined) {
+        alert("Error, Hit again");
     }
     cardDeck.splice(num,1);
-    playerCardOne.innerHTML = objCard.name + objCard.family;
+    playerCardThree.innerHTML = objCard.name + objCard.family;
+    playerCardThree.setAttribute("class", "carte");
 });
+
+/*
+    IF UNDEFINED WRITE ANOTHER FUNCTION THAT CAN BE RECURSIVE INSTEAD OF CLICK BASED
+*/
+
+/*
+    GAME TIME
+*/
+//Tirage initiale du croupier
+croupierPiocheOne();
+croupierPiocheTwo();
+//Pioche les deux cartes initiales du joueur
+playerInitialDrawOne();
+playerInitialDrawTwo();
+
+//Debug purposes
+console.log(playerScore);

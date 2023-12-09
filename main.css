@@ -4,6 +4,7 @@ body {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    color: white;
 }
 
 h1 {
